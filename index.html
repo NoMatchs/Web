@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>计数器</title>
+    <style>
+      body {
+        background: #f0f4fa;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        font-family: sans-serif;
+      }
+      #display {
+        font-size: 8rem;
+        font-weight: bold;
+        color: #1e3c5c;
+        margin: 20px 0;
+        transition: transform 0.15s ease;
+      }
+      button {
+        font-size: 1.2rem;
+        padding: 12px 28px;
+        margin: 6px;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        background: #1e3c5c;
+        color: white;
+      }
+      #resertBtn {
+        background: #d0dcea;
+        color: #1e3c5c;
+      }
+      #display.pulse {
+        transform: scale(1.08);
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>简单计数器</h1>
+
+    <div id="display">0</div>
+
+    <button id="addBtn_1">+1</button>
+    <button id="addBtn_5">+5</button>
+    <button id="subBtn">-1</button>
+    <button id="resetBtn">重置</button>
+    <p id="clickInfo">你点击了 0 次</p>
+    <script>
+      const display = document.getElementById("display");
+      const addBtn = document.getElementById("addBtn");
+      const resetBtn = document.getElementById("resetBtn");
+      const clickInfo = document.getElementById('clickInfo');  
+
+      let count = 0;
+      let clickTimes = 0;
+
+      addBtn_1.addEventListener("click", function () {
+        setCount(count + 1);
+        clickNums();
+      });
+
+      addBtn_5.addEventListener("click", function () {
+        setCount(count + 5);
+        clickNums();
+      });
+
+      resetBtn.addEventListener("click", function () {
+        setCount(0);
+        clickNums();
+      });
+
+      subBtn.addEventListener("click", function () {
+        setCount(count - 1);
+        clickNums();
+      });
+
+      function showpulse() {
+        display.classList.add("pulse");
+        setTimeout(() => {
+          display.classList.remove("pulse");
+        }, 150);
+      }
+
+      function setCount(newValue) {
+        if (newValue < 0) {
+          return;
+        }
+        count = newValue;
+        display.textContent = count;
+        showpulse();
+      }
+
+      function updateClickInfo()
+      {
+        clickInfo.textContent = '你点击了 ' + clickTimes + '次~';
+      }
+
+      function clickNums()
+      {
+        clickTimes = clickTimes + 1;
+        updateClickInfo();
+      }
+
+    </script>
+  </body>
+</html>
