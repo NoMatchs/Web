@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>霞霞的待办</title>
+    <style>
+      * {
+      }
+    </style>
+  </head>
+  <body>
+    <h1>虾儿的待办</h1>
+    <div class="input-area">
+      <input type="text" placeholder="输入待办内容..." id="todoInput" />
+      <button id="addBtn">添加</button>
+    </div>
+    <ul id="todoList"></ul>
+    <script>
+      const todoInput = document.getElementById("todoInput");
+      const addBtn = document.getElementById("addBtn");
+      const todoList = document.getElementById("todoList");
+
+      addBtn.addEventListener("click", function () {
+        const text = todoInput.value;
+
+        if (text === "") {
+          return;
+        }
+        const li = document.createElement("li");
+
+        li.textContent = text;
+
+        todoList.appendChild(li);
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "删除";
+
+        delBtn.addEventListener("click", function () {
+          li.remove();
+        });
+
+        li.appendChild(delBtn);
+
+        todoList.appendChild(li);
+
+        todoInput.value = "";
+      });
+    </script>
+  </body>
+</html>
