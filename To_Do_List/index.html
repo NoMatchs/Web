@@ -5,12 +5,152 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>霞霞的待办</title>
     <style>
-      * {
+      h1 {
+        max-width: 520px;
+        width: 100%;
+        text-align: center;
+        background: linear-gradient(135deg, #1e3c5c, #3f6a9e);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: -0.02rem;
+        /* color: #1e3c5c; */
+        margin-bottom: 8px;
+        text-align: center;
+        line-height: 1.3;
+      }
+
+      h1::after {
+        content: "";
+        display: block;
+        width: 48px;
+        height: 3px;
+        background: #1e3c5c;
+        border-radius: 3px;
+        margin: 12px auto 0;
+        opacity: 0.4;
+      }
+
+      #todoList {
+        max-width: 520px;
+        width: 100%;
+      }
+
+      .input-area {
+        max-width: 520px;
+        width: 100%;
+        display: flex;
+        gap: 12px;
+        width: 100%;
+        max-width: 520px;
+        margin-bottom: 28px;
+      }
+
+      #todoInput {
+        flex: 1;
+        min-width: 0;
+        padding: 14px 18px;
+        font-size: 1rem;
+        color: #1e3c5c;
+        background: #ffffff;
+        border: 1.5px solid #d3deed;
+        border-radius: 12px;
+        outline: none;
+        transition:
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      #todoInput::placeholder {
+        color: #a8b8cc;
+      }
+
+      #todoInput:focus {
+        border-color: #1e3c5c;
+        box-shadow: 0 0 0 3px rgba(30, 60, 92, 0.12);
+      }
+
+      #addBtn {
+        padding: 0 26px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: #1e3c5c;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+        transition:
+          background-color 0.2s ease,
+          transform 0.1s ease,
+          box-shadow 0.2s ease;
+      }
+
+      @media (hover: hover) {
+        #addBtn:hover {
+          background: #2a4f75;
+          box-shadow: 0 6px 16px rgba(30, 60, 92, 0.25);
+        }
+      }
+
+      #addBtn:active {
+        transform: scale(0.96);
+        background: #16314d;
+      }
+
+      #todoList li {
+        background: white;
+        padding: 14px 16px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0, 20, 50, 0.06);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      #todoList li button {
+        padding: 6px 14px;
+        font: size 0.9rem;
+        border: none;
+        border-radius: 8px;
+        background: #f0d5d5;
+        color: #a33;
+        cursor: pointer;
+        flex-shrink: 0;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+
+      #todoList li button:active {
+        transform: scale(0.95);
+      }
+
+      #todoList li.done {
+        text-decoration: line-through;
+        color: #9aa8b8;
+        background: #f7f9fc;
+      }
+
+      #stats {
+        max-width: 520px;
+        width: 100%;
+        text-align: center;
+        color: #5b6f8f;
+        font-size: 0.95rem;
+        margin-bottom: 16px;
       }
     </style>
   </head>
   <body>
     <h1>虾儿的待办</h1>
+    <p id="stats">共 0 条,已完成 0 条</p>
     <div class="input-area">
       <input type="text" placeholder="输入待办内容..." id="todoInput" />
       <button id="addBtn">添加</button>
@@ -21,7 +161,28 @@
       const addBtn = document.getElementById("addBtn");
       const todoList = document.getElementById("todoList");
 
-      addBtn.addEventListener("click", function () {
+      function updateStats() {
+        const allItems = todoList.querySelectorAll("li");
+
+        const total = allItems.length;
+
+        let doneCount = 0;
+        allItems.forEach(function (item) {
+          if (item.classList.contains("done")) {
+            doneCount++;
+          }
+        });
+
+        const stats = document.getElementById("stats");
+        stats.textContent = "共" + total + " 条，已完成 " + doneCount + " 条";
+      }
+
+      // addBtn.addEventListener("click", function () {
+
+      // });
+      addBtn.addEventListener("click", addTodo);
+
+      function addTodo() {
         const text = todoInput.value;
 
         if (text === "") {
@@ -31,13 +192,20 @@
 
         li.textContent = text;
 
+        li.addEventListener("click", function () {
+          li.classList.toggle("done");
+          updateStats();
+        });
+
         todoList.appendChild(li);
 
         const delBtn = document.createElement("button");
         delBtn.textContent = "删除";
 
-        delBtn.addEventListener("click", function () {
+        delBtn.addEventListener("click", function (event) {
+          event.stopPropagation();
           li.remove();
+          updateStats();
         });
 
         li.appendChild(delBtn);
@@ -45,6 +213,13 @@
         todoList.appendChild(li);
 
         todoInput.value = "";
+        updateStats();
+      }
+
+      todoInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          addTodo();
+        }
       });
     </script>
   </body>
