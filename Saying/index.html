@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: sans-serif;
+        background: #f7f9fc;
+        min-height: 100vh;
+        padding: 40px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .quote-card {
+        background: white;
+        max-width: 520px;
+        width: 100%;
+        padding: 40px 32px;
+        border-radius: 20px;
+        box-shadow: 0 12px 32px rgba(0, 20, 50, 0.08);
+        text-align: center;
+      }
+
+      #quoteText {
+        font-size: 1.4rem;
+        line-height: 1.6;
+        color: #1e3c5c;
+        margin-bottom: 20px;
+      }
+
+      #quoteAuthor {
+        font-size: 1rem;
+        color: #7a8ca3;
+      }
+
+      #newBtn {
+        margin-top: 32px;
+        padding: 14px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: white;
+        background: #1e3c5c;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        touch-action: manipulation;
+        transition:
+          background-color 0.2s ease,
+          transform 0.1s ease;
+      }
+
+      #newBtn:active {
+        transform: scale(0.96);
+        background: #16314d;
+      }
+
+      #quoteText,
+      #quoteAuthor {
+        transition: opacity 0.2s ease;
+      }
+
+      #copyBtn {
+        padding: 12px 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #1e3c5c;
+        background: #e4ecf5;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        touch-action: manipulation;
+        transition:
+          background-color 0.2s ease,
+          transform 0.1s ease;
+      }
+
+      #copyBtn:active {
+        transform: scale(0.96);
+        background: #d3e0ef;
+      }
+
+      .quote-card.fading #quoteText,
+      .quote-card.fading #quoteAuthor {
+        opacity: 0;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      @media (hover: hover) {
+        #copyBtn:hover {
+          background: #d8e4f2;
+        }
+      }
+
+      @media (hover: hover) {
+        #newBtn:hover {
+          background: #2a4f75;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="quote-card">
+      <p id="quoteText">生活不是等待暴风过去，而是学会在雨中起舞。</p>
+      <p id="quoteAuthor">-- 维维安·格林</p>
+    </div>
+
+    <button id="newBtn">换一句</button>
+    <button id="copyBtn">复制</button>
+    <script>
+      const quotes = [
+        {
+          text: "生活不是等待暴风雨过去，而是学会在雨中跳舞。",
+          author: "维维安·格林",
+        },
+        { text: "我们都在阴沟里，但仍有人仰望星空。", author: "奥斯卡·王尔德" },
+        { text: "保持饥饿，保持愚蠢。", author: "史蒂夫·乔布斯" },
+        { text: "种一棵树最好的时间是十年前，其次是现在。", author: "谚语" },
+        { text: "简单是可靠的先决条件。", author: "迪杰斯特拉" },
+        { text: "超绝不经意。", author: "霞霞" },
+        { text: "人生如逆旅，我亦是行人。", author: "苏轼" },
+        { text: "纸上得来终觉浅，绝知此事要躬行。", author: "陆游" },
+        { text: "Stay hungry, stay foolish.", author: "Steve Jobs" },
+      ];
+
+      let lastIndex = -1;
+      let isSwitching = false;
+
+      const quoteText = document.getElementById("quoteText");
+      const quoteAuthor = document.getElementById("quoteAuthor");
+      const newBtn = document.getElementById("newBtn");
+      const copyBtn = document.getElementById("copyBtn");
+
+      copyBtn.addEventListener("click", function () {
+        const text = quoteText.textContent + " " + quoteAuthor.textContent;
+
+        navigator.clipboard.writeText(text).then(function () {
+          const original = copyBtn.textContent;
+          copyBtn.textContent = "已复制";
+          setTimeout(function () {
+            copyBtn.textContent = original;
+          }, 1200);
+        });
+      });
+
+      function showRandomQuote() {
+        if (isSwitching) {
+          return;
+        }
+
+        isSwitching = true;
+        const card = document.querySelector(".quote-card");
+        card.classList.add("fading");
+
+        setTimeout(function () {
+          let index = Math.floor(Math.random() * quotes.length);
+
+          while (index === lastIndex) {
+            index = Math.floor(Math.random() * quotes.length);
+          }
+
+          lastIndex = index;
+
+          const randomQuote = quotes[index];
+          quoteText.textContent = randomQuote.text;
+          quoteAuthor.textContent = "-- " + randomQuote.author;
+
+          card.classList.remove("fading");
+          isSwitching = false;
+        }, 200);
+      }
+      showRandomQuote();
+      newBtn.addEventListener("click", showRandomQuote);
+      //   console.log("随机下标", index);
+
+      //   console.log("随机下标：", index);
+      //   console.log("取到的名言：", randomQuote);
+      //   console.log("内容：", randomQuote.text);
+      //   console.log("作者：", randomQuote.author);
+    </script>
+  </body>
+</html>
